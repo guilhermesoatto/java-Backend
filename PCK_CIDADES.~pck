@@ -3,8 +3,7 @@ create or replace package PCK_CIDADES is
   function fn_RetornaCidadePorId(p_ibge_id cidades.ibge_id%type) return cidades%rowtype;
   function fn_RetornaCapitais return sys_refcursor;
   function fn_RetornaEstadoMaiorMenor return varchar2;
-	procedure sp_RetornaQntdCidadePorEstado(p_uf in cidades.uf%type,
-                                          p_result out sys_refcursor);
+	
 	
 	
 end PCK_CIDADES;
@@ -65,28 +64,5 @@ create or replace package body PCK_CIDADES as
     return '1' || l_ufsmall ||'| 2 ' || l_ufbigger    ;
   
   end;
-	
-	procedure sp_RetornaQntdCidadePorEstado(p_uf in cidades.uf%type,
-                                          p_result out sys_refcursor) is
-  v_joker varchar2(1);
-	 
-  begin 
-	 select 'x' into v_joker from cidades e where e.uf = p_uf; 	
-	
-	 if v_joker = 'x' then
-	    open p_result for select e.uf, count(e.name_city) 
-			from cidades e
-			where e.uf = p_uf 
-			group by e.uf ;
-
-	 else
-		 open p_result for select e.uf, count(e.name_city) 
-			from cidades e
-			group by e.uf ;
-	 end if;
-			 
-		
-																					
-	
 end PCK_CIDADES;
 /
